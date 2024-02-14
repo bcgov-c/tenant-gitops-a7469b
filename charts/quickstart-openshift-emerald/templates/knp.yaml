@@ -3,7 +3,9 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: {{ .Release.Name }}-openshift-ingress-to-frontend
-  labels: {{- include "selectorLabels" . | nindent 4 }}
+  labels:
+    {{- include "selectorLabels" .  }}
+    devops.gov.bc.ca/gitops-app-shared: {{ .Release.Name }}
 spec:
   podSelector:
     matchLabels:
@@ -16,6 +18,29 @@ spec:
               network.openshift.io/policy-group: ingress
   policyTypes:
     - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-app-to-web-proxy
+  labels: {{- include "selectorLabels" . | nindent 4 }}
+spec:
+  podSelector: {}
+  egress:
+    - ports:
+        - protocol: TCP
+          port: 8080
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443
+      to:
+        - ipBlock:
+            cidr: 142.34.229.249/32
+        - ipBlock:
+            cidr: 142.34.94.249/32
+  policyTypes:
+    - Egress
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -38,7 +63,28 @@ spec:
               app.kubernetes.io/instance: {{ .Release.Name }}
   policyTypes:
     - Ingress
-
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-allow-db-to-backend
+  labels: {{- include "selectorLabels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: backend
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  egress:
+    - ports:
+        - protocol: TCP
+          port: 5432
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: {{ .Release.Name }}-{{ .Values.global.databaseAlias}}
+              app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Egress
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -61,3 +107,25 @@ spec:
               app.kubernetes.io/instance: {{ .Release.Name }}
   policyTypes:
     - Ingress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}-allow-backend-to-frontend
+  labels: {{- include "selectorLabels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: frontend
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  egress:
+    - ports:
+        - protocol: TCP
+          port: 3000
+      to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: backend
+              app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Egress

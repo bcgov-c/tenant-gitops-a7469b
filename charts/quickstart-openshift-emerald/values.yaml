@@ -197,7 +197,7 @@ backend:
     #-- enable or disable the service.
     enabled: true
     #-- the type of the service. it can be ClusterIP, NodePort, LoadBalancer, ExternalName. ClusterIP is the default and is recommended.
-    type: ClusterIP
+    type: LoadBalancer
     #-- the ports for the service.
     ports:
       #-- the name for the port.
@@ -355,7 +355,7 @@ frontend:
     #-- enable or disable the service.
     enabled: true
     #-- the type of the service. it can be ClusterIP, NodePort, LoadBalancer, ExternalName. ClusterIP is the default and is recommended.
-    type: ClusterIP
+    type: LoadBalancer
     #-- the ports for the service.
     ports:
       - name: http
@@ -491,7 +491,7 @@ database:
   autoscaling:
     enabled: false
   service:
-    type: ClusterIP
+    type: LoadBalancer
     port: 5432
     targetPort: 5432
   nodeSelector: { }

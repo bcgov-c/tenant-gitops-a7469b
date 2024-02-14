@@ -4,8 +4,9 @@ kind: NetworkPolicy
 metadata:
   name: {{ .Release.Name }}-openshift-ingress-to-frontend
   labels:
-    {{- include "selectorLabels" .  }}
     devops.gov.bc.ca/gitops-app-shared: {{ .Release.Name }}
+    app.kubernetes.io/name: {{ include "fullname" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   podSelector:
     matchLabels:

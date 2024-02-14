@@ -25,7 +25,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Values.global.databaseAlias}}
+      app.kubernetes.io/name: {{ .Release.Name }}-{{ .Values.global.databaseAlias}}
       app.kubernetes.io/instance: {{ .Release.Name }}
   ingress:
     - ports:

@@ -36,9 +36,9 @@ dependencies:
     alias: frontend
 
   - name: database
-    condition: bitnami-pg.enabled
+    condition: database.enabled
     version: 0.1.0
-    alias: bitnami-pg
+    alias: database
 
   - name: component
     condition: backup.enabled

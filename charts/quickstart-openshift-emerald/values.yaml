@@ -23,7 +23,7 @@ global:
   #-- the image registry of OpenShift. It is used in conjunction with ImageStreams which is a OpenShift specific resource.
   openshiftImageRegistry: "image-registry.openshift-image-registry.svc:5000"
   #-- the database Alias gives a nice way to switch to different databases, crunchy, patroni ... etc.
-  databaseAlias: bitnami-pg # this is the alias for bitnami postgres, change it based on db type(crunchy,patroni...) and alias used in the chart.
+  databaseAlias: database # this is the alias for bitnami postgres, change it based on db type(crunchy,patroni...) and alias used in the chart.
   #-- extra annotations for the pod, it is optional and is an object.
   podAnnotations: |
       app.kubernetes.io/timestamp: {{now | toString }}
@@ -473,49 +473,42 @@ crunchy: # enable it for TEST and PROD, for PR based pipelines simply use single
         cpu: 50m
         memory: 128Mi
 
-bitnami-pg:
+database:
   enabled: true
+  deploymentStrategy: Recreate
+  replicaCount: 1
+  nameOverride: ""
+  fullnameOverride: ""
   image:
-    registry: ghcr.io
-    repository: bcgov/nr-containers/bitnami/postgresql
-    tag: 15.6.0
-  auth:
-    existingSecret: '{{ .Release.Name }}'
-    username: 'quickstart'
-    database: quickstart
-  shmVolume:
+    repository: ghcr.io/bcgov/nr-containers/postgres
+    pullPolicy: IfNotPresent
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: 15.5
+  podAnnotations: { }
+  podSecurityContext: { }
+  securityContext: { }
+  imagePullSecrets: [ ]
+  autoscaling:
     enabled: false
-  backup:
-    enabled: false
-    cronjob:
-      containerSecurityContext: { }
-      podSecurityContext:
-        enabled: false
-      storage:
-        size: 200Mi
-  primary:
-    persistence:
-      enabled: true
-      storageClass: netapp-block-standard
-      accessModes:
-        - ReadWriteOnce
-      size: 100Mi
-    containerSecurityContext:
-      enabled: false
-    podSecurityContext:
-      enabled: false
-    initdb:
-      scripts: # remove the below script, if POSTGIS is not required.
-        postgis.sh: |
-          #!/bin/sh
-          PGPASSWORD=$POSTGRES_PASSWORD psql -U postgres -d postgres -c "CREATE EXTENSION postgis;"
-    resources:
-      requests:
-        cpu: 50m
-        memory: 150Mi
-      limits:
-        cpu: 150m
-        memory: 250Mi
+  service:
+    type: ClusterIP
+    port: 5432
+    targetPort: 5432
+  nodeSelector: { }
+  tolerations: [ ]
+  affinity: { }
+  resources:
+    limits:
+      cpu: 100m
+      memory: 250Mi
+    requests:
+      cpu: 50m
+      memory: 100Mi
+  persistence:
+    enabled: true
+    size: 80Mi
+    accessMode: ReadWriteMany
+    storageClass: netapp-block-standard
 
 backup:
   enabled: true

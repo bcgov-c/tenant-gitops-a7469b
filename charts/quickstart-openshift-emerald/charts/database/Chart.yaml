@@ -1,7 +1,6 @@
 apiVersion: v2
-name: quickstart-openshift-emerald
-description: A Helm chart for Kubernetes deployment.
-icon: https://www.nicepng.com/png/detail/521-5211827_bc-icon-british-columbia-government-logo.png
+name: database
+description: A Helm chart for Kubernetes
 
 # A chart can be either an 'application' or a 'library' chart.
 #
@@ -23,29 +22,3 @@ version: 0.1.0
 # follow Semantic Versioning. They should reflect the version the application is using.
 # It is recommended to use it with quotes.
 appVersion: "1.16.0"
-
-dependencies:
-  - name: component
-    condition: backend.enabled
-    version: 0.3.0
-    alias: backend
-
-  - name: component
-    condition: frontend.enabled
-    version: 0.3.0
-    alias: frontend
-
-  - name: database
-    condition: bitnami-pg.enabled
-    version: 0.1.0
-    alias: bitnami-pg
-
-  - name: component
-    condition: backup.enabled
-    version: 0.3.0
-    alias: backup
-maintainers:
-  - name: Om Mishra
-    email: omprakash.2.mishra@gov.bc.ca
-  - name: Derek Roberts
-    email: derek.roberts@gov.bc.ca

@@ -64,7 +64,7 @@ backend:
         #-- the environment variables from values, these are interpolated during runtime and can contain tpl.
         fromValues:
           - name: POSTGRES_HOST
-            value: '{{ .Release.Name }}-{{.Values.global.databaseAlias}}'
+            value: '{{ .Release.Name }}-{{.Values.global.databaseAlias}}.{{ .Release.Namespace }}.svc.cluster.local'
       #-- the ports for the container. it is optional and is an array of objects.
       ports:
         - name: http

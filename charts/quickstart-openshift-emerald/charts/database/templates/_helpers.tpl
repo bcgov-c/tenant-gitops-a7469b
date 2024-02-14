@@ -38,8 +38,7 @@ app.kubernetes.io/short-name: {{ include "database.name" . }}
 {{- end }}
 app.kubernetes.io/image-version: {{ .Values.image.tag | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-DataClass: Low
-Internet-Ingress: ALLOW
+
 {{- end }}
 
 {{/*
@@ -48,5 +47,7 @@ Selector labels
 {{- define "database.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "database.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+DataClass: Low
+Internet-Ingress: ALLOW
 {{- end }}
 

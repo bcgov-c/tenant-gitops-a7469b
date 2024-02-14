@@ -50,6 +50,8 @@ Selector labels
 {{- define "component.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "component.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+DataClass: Low
+Internet-Ingress: ALLOW
 {{- end }}
 
 {{/*

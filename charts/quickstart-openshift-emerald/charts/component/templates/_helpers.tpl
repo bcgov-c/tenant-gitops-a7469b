@@ -41,6 +41,8 @@ app.kubernetes.io/image-tag: {{ .Values.global.tag | quote }}
 {{- if .Values.global.labels }}
 {{tpl .Values.global.labels .}}
 {{- end }}
+DataClass: Low
+Internet-Ingress: ALLOW
 {{- end }}
 {{/*
 Selector labels

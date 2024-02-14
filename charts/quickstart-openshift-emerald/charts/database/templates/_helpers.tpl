@@ -38,6 +38,8 @@ app.kubernetes.io/short-name: {{ include "database.name" . }}
 {{- end }}
 app.kubernetes.io/image-version: {{ .Values.image.tag | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+DataClass: Low
+Internet-Ingress: ALLOW
 {{- end }}
 
 {{/*

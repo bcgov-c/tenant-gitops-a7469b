@@ -5,7 +5,7 @@ global:
   #-- the registry where the images are stored. override during runtime for other registry at global level or individual level.
   repository: bcgov/quickstart-openshift
   #-- the registry where the images are stored. override during runtime for other registry at global level or individual level. default is ghcr.io
-  registry: ghcr.io
+  registry: artifacts.developer.gov.bc.ca/github-docker-remote
   #-- the tag of the image, it can be latest, 1.0.0 etc..., or the sha256 hash
   tag: prod
   #-- turn off autoscaling for the entire suite by setting this to false. default is true.
@@ -21,14 +21,11 @@ global:
   #-- domain of the application, it is required, apps.silver.devops.gov.bc.ca for silver cluster and apps.devops.gov.bc.ca for gold cluster
   domain: "apps.emerald.devops.gov.bc.ca"
   #-- the image registry of OpenShift. It is used in conjunction with ImageStreams which is a OpenShift specific resource.
-  openshiftImageRegistry: "image-registry.openshift-image-registry.svc:5000"
   #-- the database Alias gives a nice way to switch to different databases, crunchy, patroni ... etc.
   databaseAlias: database # this is the alias for bitnami postgres, change it based on db type(crunchy,patroni...) and alias used in the chart.
   #-- extra annotations for the pod, it is optional and is an object.
   podAnnotations: |
       app.kubernetes.io/timestamp: {{now | toString }}
-  imagestreams:
-    enabled: true
 #-- the components of the application, backend.
 backend:
   #-- enable or disable a component deployment.
@@ -480,7 +477,7 @@ database:
   nameOverride: ""
   fullnameOverride: ""
   image:
-    repository: ghcr.io/bcgov/nr-containers/postgres
+    repository: artifacts.developer.gov.bc.ca/github-docker-remote/bcgov/nr-containers/postgres
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: 15.5

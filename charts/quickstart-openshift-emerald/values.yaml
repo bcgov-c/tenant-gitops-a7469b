@@ -9,7 +9,7 @@ global:
   #-- the tag of the image, it can be latest, 1.0.0 etc..., or the sha256 hash
   tag: prod
   #-- turn off autoscaling for the entire suite by setting this to false. default is true.
-  autoscaling: true
+  autoscaling: false
   #-- global secrets, can be accessed by sub-charts.
   secrets:
     enabled: true
@@ -70,10 +70,10 @@ backend:
       #-- the resources for the container. it is optional and is an object. for default values check this link:   https://github.com/bcgov/helm-service/blob/main/charts/component/templates/deployment.yaml#L298-L304
       resources: # this is optional
         limits:
-          cpu: 250m
+          cpu: 100m
           memory: 250Mi
         requests:
-          cpu: 100m
+          cpu: 30m
           memory: 150Mi
       #-- the readiness probe for the container. it is optional and is an object. for default values check this link: https://github.com/bcgov/helm-service/blob/main/charts/component/templates/deployment.yaml#L312-L316
       readinessProbe:
@@ -130,10 +130,10 @@ backend:
       #-- the resources for the container. it is optional and is an object. for default values check this link:
       resources:
         limits:
-          cpu: 500m
+          cpu: 100m
           memory: 250Mi
         requests:
-          cpu: 200m
+          cpu: 30m
           memory: 150Mi
   #-- autoscaling for the component. it is optional and is an object.
   autoscaling:
@@ -284,7 +284,7 @@ frontend:
       #-- the resources for the container. it is optional and is an object. for default values check this link: https://github.com/bcgov/helm-service/blob/main/charts/component/templates/deployment.yaml#L298-L304
       resources:
         limits:
-          cpu: 100m
+          cpu: 50m
           memory: 150Mi
         requests:
           cpu: 30m

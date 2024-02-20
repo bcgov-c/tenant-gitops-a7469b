@@ -36,6 +36,8 @@ app.kubernetes.io/short-name: {{ include "frontend.name" . }}
 Selector labels
 */}}
 {{- define "frontend.selectorLabels" -}}
+DataClass: Low
+Internet-Ingress: ALLOW
 app.kubernetes.io/name: {{ include "frontend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

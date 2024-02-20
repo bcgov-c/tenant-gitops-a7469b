@@ -35,6 +35,8 @@ app.kubernetes.io/short-name: {{ include "backup.name" . }}
 Selector labels
 */}}
 {{- define "backup.selectorLabels" -}}
+DataClass: Low
+Internet-Ingress: ALLOW
 app.kubernetes.io/name: {{ include "backup.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

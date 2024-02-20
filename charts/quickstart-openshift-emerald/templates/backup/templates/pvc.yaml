@@ -1,0 +1,16 @@
+{{- if and .Values.backup .Values.backup.enabled }}
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "backup.fullname" . }}
+  labels:
+    {{- include "backup.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - {{ .Values.backup.pvc.accessModes }}
+  resources:
+    requests:
+      storage: {{ .Values.backup.pvc.size }}
+  storageClassName: {{ .Values.backup.pvc.storageClassName }}
+{{- end }}

@@ -1,0 +1,67 @@
+{{- if and .Values.backup .Values.backup.enabled }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ include "backup.fullname" . }}
+  labels:
+    {{- include "backup.labels" . | nindent 4 }}
+  namespace: {{ .Release.Namespace | quote }}
+spec:
+  schedule: {{ quote .Values.backup.schedule }}
+  concurrencyPolicy: {{ .Values.backup.concurrencyPolicy }}
+  failedJobsHistoryLimit: {{ .Values.backup.failedJobsHistoryLimit }}
+  successfulJobsHistoryLimit: {{ .Values.backup.successfulJobsHistoryLimit }}
+  {{- if .Values.backup.startingDeadlineSeconds }}
+  startingDeadlineSeconds: {{ .Values.backup.startingDeadlineSeconds }}
+  {{- end }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            {{- include "backup.labels" . | nindent 12 }}
+        spec:
+          containers:
+            - name: backup
+              image: "artifacts.developer.gov.bc.ca/docker-remote/bcgovimages/backup-container:latest"
+              imagePullPolicy: Always
+              command:
+                - "/bin/bash"
+                - "-c"
+                - "/backup.sh -1"
+              volumeMounts:
+                - mountPath: "/backups/"
+                  name: "{{.Release.Name}}-backup"
+              envFrom:
+                - secretRef:
+                    name: {{.Release.Name}}
+              env:
+                  - name: BACKUP_DIR
+                    value: "/backups/"
+                  - name: BACKUP_STRATEGY
+                    value: "rolling"
+                  - name: NUM_BACKUPS
+                    value: '5'
+                  - name: DAILY_BACKUPS
+                    value: '7'
+                  - name: WEEKLY_BACKUPS
+                    value: '4'
+                  - name: MONTHLY_BACKUPS
+                    value: '1'
+                  - name: DATABASE_SERVICE_NAME
+                    value: "{{.Release.Name}}-{{.Values.global.databaseAlias}}"
+                  - name: DEFAULT_PORT
+                    value: "5432"
+              resources:
+                limits:
+                    cpu: '50m'
+                    memory: '100Mi'
+                requests:
+                    cpu: '10m'
+                    memory: '20Mi'
+          restartPolicy: {{ .Values.backup.restartPolicy }}
+          volumes:
+            - name: "{{.Release.Name}}-backup"
+              persistentVolumeClaim:
+                claimName: "{{.Release.Name}}-backup"
+{{- end}}

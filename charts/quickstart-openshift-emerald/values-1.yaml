@@ -28,10 +28,10 @@ global:
     app.kubernetes.io/timestamp: {{now | toString }}
 #-- the components of the application, backend.
 backend:
-  enabled: true
+  enabled: false
   deploymentStrategy: Recreate
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 3
     targetCPUUtilizationPercentage: 80
@@ -39,10 +39,10 @@ backend:
     type: ClusterIP
 
 frontend:
-  enabled: true
+  enabled: false
   deploymentStrategy: Recreate
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 3
     targetCPUUtilizationPercentage: 80
@@ -53,7 +53,7 @@ frontend:
 
 
 database:
-  enabled: true
+  enabled: false
   deploymentStrategy: Recreate
   replicaCount: 1
   nameOverride: ""

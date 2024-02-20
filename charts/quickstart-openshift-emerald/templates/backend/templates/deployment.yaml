@@ -64,7 +64,7 @@ spec:
               value: info
           ports:
             - name: http
-              containerPort: {{ .Values.backend.service.targetPort }}
+              containerPort: 3000
               protocol: TCP
           readinessProbe:
             httpGet:

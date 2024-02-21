@@ -43,10 +43,10 @@ spec:
               value: "10"
           resources:
             limits:
-              cpu: 500m
+              cpu: 75m
               memory: 250Mi
             requests:
-              cpu: 200m
+              cpu: 30m
               memory: 150Mi
       containers:
         - name: {{ include "backend.fullname" . }}
@@ -88,10 +88,10 @@ spec:
             timeoutSeconds: 5
           resources: # this is optional
             limits:
-              cpu: 250m
+              cpu: 75m
               memory: 250Mi
             requests:
-              cpu: 100m
+              cpu: 30m
               memory: 150Mi
       {{- with .Values.backend.nodeSelector }}
       nodeSelector:

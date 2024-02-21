@@ -78,16 +78,16 @@ database:
   affinity: { }
   resources:
     limits:
-      cpu: 100m
+      cpu: 60m
       memory: 250Mi
     requests:
-      cpu: 50m
+      cpu: 20m
       memory: 100Mi
   persistence:
     enabled: false
     size: 80Mi
-    accessMode: ReadWriteMany
-    storageClass: netapp-file-standard
+    accessMode: ReadWriteOnce
+    storageClass: netapp-block-standard
 
 backup:
   enabled: false

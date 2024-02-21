@@ -93,7 +93,7 @@ backup:
   enabled: true
   pvc:
     size: 256Mi
-    storageClassName: netapp-file-standard
+    storageClassName: netapp-backup-standard
     accessModes: ReadWriteOnce
   restartPolicy: "Never"
   schedule: "0 0 * * *"

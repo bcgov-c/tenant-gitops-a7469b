@@ -28,10 +28,10 @@ global:
     app.kubernetes.io/timestamp: {{now | toString }}
 #-- the components of the application, backend.
 backend:
-  enabled: true
+  enabled: false
   deploymentStrategy: Recreate
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 3
     targetCPUUtilizationPercentage: 80
@@ -39,10 +39,10 @@ backend:
     type: ClusterIP
 
 frontend:
-  enabled: true
+  enabled: false
   deploymentStrategy: Recreate
   autoscaling:
-    enabled: true
+    enabled: false
     minReplicas: 1
     maxReplicas: 3
     targetCPUUtilizationPercentage: 80
@@ -53,7 +53,7 @@ frontend:
 
 
 database:
-  enabled: true
+  enabled: false
   deploymentStrategy: Recreate
   replicaCount: 1
   nameOverride: ""
@@ -78,16 +78,16 @@ database:
   affinity: { }
   resources:
     limits:
-      cpu: 100m
+      cpu: 60m
       memory: 250Mi
     requests:
-      cpu: 50m
+      cpu: 20m
       memory: 100Mi
   persistence:
-    enabled: true
+    enabled: false
     size: 80Mi
-    accessMode: ReadWriteMany
-    storageClass: netapp-file-standard
+    accessMode: ReadWriteOnce
+    storageClass: netapp-block-standard
 
 backup:
   enabled: false

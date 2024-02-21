@@ -1,4 +1,4 @@
-{{- if .Values.frontend.enabled }}
+{{- if and .Values.global.enabled .Values.frontend.enabled }}
 ---
 apiVersion: v1
 kind: Service

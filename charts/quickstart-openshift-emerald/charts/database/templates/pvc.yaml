@@ -1,4 +1,4 @@
-{{- if .Values.enabled }}
+{{- if and .Values.global.enabled .Values.enabled }}
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1

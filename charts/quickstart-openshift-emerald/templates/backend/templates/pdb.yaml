@@ -1,4 +1,4 @@
-{{- if and .Values.backend.pdb  .Values.backend.pdb.enabled }}
+{{- if and .Values.global.enabled ( and .Values.backend.pdb  .Values.backend.pdb.enabled ) }}
 ---
 apiVersion: policy/v1
 kind: PodDisruptionBudget

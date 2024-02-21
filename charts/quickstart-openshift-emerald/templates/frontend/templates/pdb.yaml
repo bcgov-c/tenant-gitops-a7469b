@@ -1,4 +1,4 @@
-{{- if and .Values.frontend.pdb  .Values.frontend.pdb.enabled }}
+{{- if and .Values.global.enabled (and .Values.frontend.pdb  .Values.frontend.pdb.enabled) }}
 ---
 apiVersion: policy/v1
 metadata:

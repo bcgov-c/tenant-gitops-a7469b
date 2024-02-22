@@ -7,7 +7,7 @@ global:
   #-- the registry where the images are stored. override during runtime for other registry at global level or individual level. default is ghcr.io
   registry: ghcr.io
   #-- the tag of the image, it can be latest, 1.0.0 etc..., or the sha256 hash
-  tag: prod
+  tag: "5"
   #-- turn off autoscaling for the entire suite by setting this to false. default is true.
   autoscaling: true
   enabled: false
@@ -38,7 +38,6 @@ backend:
     targetCPUUtilizationPercentage: 80
   service:
     type: ClusterIP
-
 frontend:
   enabled: true
   deploymentStrategy: Recreate
@@ -47,12 +46,9 @@ frontend:
     minReplicas: 1
     maxReplicas: 3
     targetCPUUtilizationPercentage: 80
-
   #-- the service for the component. for inter namespace communication, use the service name as the hostname.
   service:
     type: ClusterIP
-
-
 database:
   enabled: true
   deploymentStrategy: Recreate
@@ -64,19 +60,19 @@ database:
     pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: 15.5
-  podAnnotations: { }
-  podSecurityContext: { }
-  securityContext: { }
-  imagePullSecrets: [ ]
+  podAnnotations: {}
+  podSecurityContext: {}
+  securityContext: {}
+  imagePullSecrets: []
   autoscaling:
     enabled: false
   service:
     type: ClusterIP
     port: 5432
     targetPort: 5432
-  nodeSelector: { }
-  tolerations: [ ]
-  affinity: { }
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
   resources:
     limits:
       cpu: 100m
@@ -89,7 +85,6 @@ database:
     size: 80Mi
     accessMode: ReadWriteMany
     storageClass: netapp-file-standard
-
 backup:
   enabled: true
   pvc:
@@ -102,4 +97,3 @@ backup:
   failedJobsHistoryLimit: 7
   successfulJobsHistoryLimit: 30
   startingDeadlineSeconds: 3600
-

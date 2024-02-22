@@ -36,6 +36,7 @@ helm.sh/chart: {{ include "database.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/short-name: {{ include "database.name" . }}
 {{- end }}
+DataClass: Low
 app.kubernetes.io/image-version: {{ .Values.image.tag | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 

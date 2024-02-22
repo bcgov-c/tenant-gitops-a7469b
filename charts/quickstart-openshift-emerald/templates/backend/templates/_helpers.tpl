@@ -27,6 +27,7 @@ Common labels
 {{- if .Values.global.tag }}
 app.kubernetes.io/image-version: {{ .Values.global.tag | quote }}
 {{- end }}
+DataClass: Low
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/short-name: {{ include "backend.name" . }}
 {{- end }}
@@ -35,7 +36,6 @@ app.kubernetes.io/short-name: {{ include "backend.name" . }}
 Selector labels
 */}}
 {{- define "backend.selectorLabels" -}}
-DataClass: Low
 app.kubernetes.io/name: {{ include "backend.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

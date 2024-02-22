@@ -48,7 +48,5 @@ Selector labels
 {{- define "database.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "database.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-DataClass: Low
-Internet-Ingress: ALLOW
 {{- end }}
 

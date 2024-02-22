@@ -10,7 +10,7 @@ global:
   tag: d714ef6acdce87289208de2c5b9f69f2ef3dc83b
   #-- turn off autoscaling for the entire suite by setting this to false. default is true.
   autoscaling: false
-  enabled: true # globally enable/disable the entire suite
+  enabled: false # globally enable/disable the entire suite
   #-- global secrets, can be accessed by sub-charts.
   secrets:
     enabled: true

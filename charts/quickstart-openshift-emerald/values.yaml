@@ -7,7 +7,7 @@ global:
   #-- the registry where the images are stored. override during runtime for other registry at global level or individual level. default is ghcr.io
   registry: ghcr.io
   #-- the tag of the image, it can be latest, 1.0.0 etc..., or the sha256 hash
-  tag: "5"
+  tag: "8"
   #-- turn off autoscaling for the entire suite by setting this to false. default is true.
   autoscaling: false
   enabled: true

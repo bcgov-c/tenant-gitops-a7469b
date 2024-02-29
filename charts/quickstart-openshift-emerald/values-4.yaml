@@ -7,10 +7,10 @@ global:
   #-- the registry where the images are stored. override during runtime for other registry at global level or individual level. default is ghcr.io
   registry: ghcr.io
   #-- the tag of the image, it can be latest, 1.0.0 etc..., or the sha256 hash
-  tag: 7a8256ae7630ac9e78d667a086c7717043dfc8f4
+  tag: d3ca5d82c39b65d743ed3a1d8a5fd04a424b2f27
   #-- turn off autoscaling for the entire suite by setting this to false. default is true.
   autoscaling: false
-  enabled: false # globally enable/disable the entire suite
+  enabled: true # globally enable/disable the entire suite
   #-- global secrets, can be accessed by sub-charts.
   secrets:
     enabled: true

@@ -36,7 +36,7 @@ helm.sh/chart: {{ include "database.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 app.kubernetes.io/short-name: {{ include "database.name" . }}
 {{- end }}
-DataClass: Low
+DataClass: High
 app.kubernetes.io/image-version: {{ .Values.image.tag | quote }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 
@@ -46,7 +46,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "database.selectorLabels" -}}
-DataClass: Low
+DataClass: High
 app.kubernetes.io/name: {{ include "database.fullname" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}

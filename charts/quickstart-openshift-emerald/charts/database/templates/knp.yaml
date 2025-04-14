@@ -1,0 +1,45 @@
+{{- if .Values.crunchy.enabled}}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Release.Name }}
+  labels: {{- include "crunchy-postgres.selectorLabels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      postgres-operator.crunchydata.com/cluster: {{ template "crunchy-postgres.fullname" . }}
+  ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            postgres-operator.crunchydata.com/cluster: {{ template "crunchy-postgres.fullname" . }}
+      ports:
+        - protocol: TCP
+          port: 8008
+        - protocol: TCP
+          port: 5432
+        - protocol: TCP
+          port: 9187
+        - protocol: TCP
+          port: 8432
+
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              postgres-operator.crunchydata.com/cluster: {{ template "crunchy-postgres.fullname" . }}
+      ports:
+        - protocol: TCP
+          port: 8008
+        - protocol: TCP
+          port: 5432
+        - protocol: TCP
+          port: 9187
+        - protocol: TCP
+          port: 8432
+
+  policyTypes:
+    - Ingress
+    - Egress
+{{- end }}

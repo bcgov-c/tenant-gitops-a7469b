@@ -1,0 +1,71 @@
+{{- if and (eq .Release.Namespace "a7469b-dev") (.Values.global.devCleanupID) }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  namespace: a7469b-dev
+  labels: {{ include "crunchy-postgres.labels" . | nindent 4 }}
+  name: maintain-crunchy-devs-{{ .Values.global.devCleanupID }}
+  annotations:
+    argocd.argoproj.io/sync-options: Force=True,Replace=true  # Ensure it gets recreated
+spec:
+  template:
+    metadata:
+      labels: {{ include "crunchy-postgres.labels" . | nindent 8 }}
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: maintain-crunchy-devs
+          image: quay.io/fedora/postgresql-16
+          env:
+            - name: DELETE_ID
+              value: "{{ .Values.global.devCleanupID }}"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "crunchy-postgres.fullname" . }}-pguser-postgres
+                  key: password
+            - name: PGUSER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "crunchy-postgres.fullname" . }}-pguser-postgres
+                  key: user
+            - name: PGHOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "crunchy-postgres.fullname" . }}-pguser-postgres
+                  key: host
+            - name: PGPORT
+              value: "5432"
+            - name: PGDATABASE
+              value: "postgres" # connect to default db, as we cannot be connected to the db we are about to delete
+            - name: DELETE_DB_PREFIX
+              value: "app"
+          command:
+            - /bin/bash
+            - -c
+            - |
+              if [ -z "$DELETE_ID" ]; then
+                echo "DELETE_ID is not set - exiting"
+                exit 0
+              fi
+              echo "DELETE_ID is set"
+              echo "Environment config:"
+              printenv | grep PG
+              psql -c "\list"
+              echo "Cleaning up dev database $DELETE_DB_PREFIX-$DELETE_ID..."
+              psql -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$DELETE_DB_PREFIX-$DELETE_ID' AND pid <> pg_backend_pid();"
+              psql -c "DROP DATABASE IF EXISTS \"$DELETE_DB_PREFIX-$DELETE_ID\";"
+              echo ""
+              echo "If it existed, db $DELETE_DB_PREFIX-$DELETE_ID should not be listed below:"
+              psql -c "\list"
+              echo ""
+              echo "Cleanup complete!"
+              echo "Recreating database $DELETE_DB_PREFIX-$DELETE_ID..."
+              psql -c "CREATE DATABASE \"$DELETE_DB_PREFIX-$DELETE_ID\";"
+              psql -c "GRANT ALL PRIVILEGES ON DATABASE \"$DELETE_DB_PREFIX-$DELETE_ID\" TO \"$DELETE_DB_PREFIX-$DELETE_ID\";"
+              echo ""
+              echo "Database $DELETE_DB_PREFIX-$DELETE_ID should be listed below:"
+              psql -c "\list"
+              echo ""
+              echo "Recreation complete!"
+{{- end }}
